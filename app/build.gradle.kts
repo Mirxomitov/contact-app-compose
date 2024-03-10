@@ -77,7 +77,9 @@ dependencies {
 
     // Hilt integration
     val voyagerVersion = "1.0.0"
+    implementation("cafe.adriel.voyager:voyager-navigator:$voyagerVersion")
     implementation("cafe.adriel.voyager:voyager-hilt:$voyagerVersion")
+    implementation("cafe.adriel.voyager:voyager-bottom-sheet-navigator:$voyagerVersion")
 
     // Gson
     implementation("com.google.code.gson:gson:2.10.1")

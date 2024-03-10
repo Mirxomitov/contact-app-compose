@@ -16,8 +16,7 @@ class PreferenceModule {
     @[Provides Singleton]
     fun provideSharedPreference(
         @ApplicationContext context: Context
-    ): SharedPreferences =
-        context.getSharedPreferences(
-            "preferences", Context.MODE_PRIVATE
-        )
+    ): SharedPreferences = context.getSharedPreferences(
+        "preferences", Context.MODE_PRIVATE
+    )
 }
