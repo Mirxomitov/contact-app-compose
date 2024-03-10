@@ -11,10 +11,12 @@ import uz.gita.contactappcompose.data.source.remote.api.ContactApi
 import uz.gita.contactappcompose.domain.ContactRepository
 import uz.gita.contactappcompose.utils.mapper.toUIData
 import javax.inject.Inject
+import javax.inject.Singleton
 
+@Singleton
 class ContactRepositoryImpl @Inject constructor(
     private val sharedPreference: SharedPreference,
-    private val api: ContactApi
+    private val api: ContactApi,
 ) : ContactRepository {
     override fun loadContacts(): Flow<Result<List<ContactUIData>>> = flow {
         val response = api.allContacts(sharedPreference.getToken())

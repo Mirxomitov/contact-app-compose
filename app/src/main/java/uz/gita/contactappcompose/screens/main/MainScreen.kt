@@ -104,7 +104,8 @@ fun MainScreenContent(
                     items(uiState.contacts) {
                         ContactItem(
                             contact = it,
-                            onClick = {}
+                            onClick = {},
+                            onLongClick = {}
                         )
                     }
                 }

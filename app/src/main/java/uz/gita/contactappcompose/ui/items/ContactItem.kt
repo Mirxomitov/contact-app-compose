@@ -1,7 +1,8 @@
 package uz.gita.contactappcompose.ui.items
 
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
+import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -18,7 +19,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
@@ -29,10 +29,12 @@ import uz.gita.contactappcompose.ui.theme.ColorContactItemCircle
 import uz.gita.contactappcompose.ui.theme.ColorContactItemText
 import uz.gita.contactappcompose.ui.theme.CustomRippleTheme
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun ContactItem(
     contact: ContactUIData,
-    onClick : () -> Unit
+    onClick: () -> Unit,
+    onLongClick: () -> Unit
 ) {
     CompositionLocalProvider(
         LocalRippleTheme provides CustomRippleTheme(ColorContactItemText)
@@ -42,7 +44,10 @@ fun ContactItem(
                 .fillMaxWidth()
                 .height(64.dp)
                 .padding(horizontal = 4.dp)
-                .clickable { onClick() },
+                .combinedClickable(
+                    onClick = onClick,
+                    onLongClick = onLongClick,
+                ),
             verticalAlignment = Alignment.CenterVertically
         ) {
             Box(
