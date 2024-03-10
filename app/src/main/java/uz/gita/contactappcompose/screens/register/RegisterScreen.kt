@@ -101,7 +101,7 @@ fun RegisterScreeContent(
             value = firstName,
             onValueChange = { firstName = it })
 
-        Spacer(modifier = Modifier.height(16.dp))
+        Spacer(modifier = Modifier.height(8.dp))
 
         Text(
             text = "Last name",
@@ -123,7 +123,7 @@ fun RegisterScreeContent(
             value = lastName,
             onValueChange = { lastName = it })
 
-        Spacer(modifier = Modifier.height(16.dp))
+        Spacer(modifier = Modifier.height(8.dp))
 
         Text(
             text = "Phone number",
@@ -147,7 +147,7 @@ fun RegisterScreeContent(
             value = phone,
             onValueChange = { phone = it })
 
-        Spacer(modifier = Modifier.height(16.dp))
+        Spacer(modifier = Modifier.height(8.dp))
 
         Text(
             text = "Password",
@@ -212,13 +212,15 @@ fun RegisterScreeContent(
             },
             enabled = enabled,
             isLoading = isLoading,
-            modifier = Modifier.padding(24.dp)
+            modifier = Modifier.padding(horizontal = 24.dp, vertical = 8.dp)
         )
 
         ClickableText(
             fullText = "Do you have an account? Login",
             clickableText = "Login",
-            onClick = { eventDispatcher(RegisterContract.Intent.Login) })
+            onClick = { eventDispatcher(RegisterContract.Intent.Login) }
+        )
+        HeightSpace(height = 16)
     }
 }
 

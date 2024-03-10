@@ -10,7 +10,7 @@ interface LoginContract {
     interface SideEffect {}
     interface Intent {
         data class Login(val phone: String, val password: String) : Intent
-        data object Register : Intent
+        data object     Register : Intent
     }
 
     interface Direction {

@@ -7,6 +7,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.tooling.preview.Preview
+import uz.gita.contactappcompose.utils.logger
 
 @Composable
 fun ClickableText(
@@ -39,10 +40,10 @@ fun ClickableText(
                 "Clickable",
                 start = offset,
                 end = offset
-            )
-                .firstOrNull()?.let { annotation ->
+            ).firstOrNull()?.let { annotation ->
                     if (annotation.item == clickableText) {
                         onClick()
+                        logger("CLICKED")
                     }
                 }
         }

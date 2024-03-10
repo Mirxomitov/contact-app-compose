@@ -40,7 +40,9 @@ class LoginViewModel @Inject constructor(
             }
 
 
-            LoginContract.Intent.Register -> {}
+            LoginContract.Intent.Register -> {
+                navigation.toRegisterScreen()
+            }
         }
     }
 
