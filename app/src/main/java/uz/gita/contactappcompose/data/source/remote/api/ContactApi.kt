@@ -17,12 +17,12 @@ interface ContactApi {
         @Body data: RegisterRequestData
     ): Response<RegisterResponseData>
 
-    @POST
+    @POST("api/v1/register/verify")
     suspend fun verifySmsCode(
         @Body data: VerifyRequestData
     ): Response<VerifyResponseData>
 
-    @POST
+    @POST("api/v1/login/")
     suspend fun logIn(
         @Body data: LogInRequestData
     ): Response<LogInResponseData>

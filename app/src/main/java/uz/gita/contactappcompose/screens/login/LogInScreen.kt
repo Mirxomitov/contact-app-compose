@@ -26,12 +26,15 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardCapitalization
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import cafe.adriel.voyager.core.screen.Screen
+import cafe.adriel.voyager.hilt.getViewModel
+import org.orbitmvi.orbit.compose.collectAsState
 import uz.gita.contactappcompose.R
 import uz.gita.contactappcompose.ui.components.ButtonComponent
 import uz.gita.contactappcompose.ui.components.HeightSpace
@@ -39,12 +42,18 @@ import uz.gita.contactappcompose.ui.components.HeightSpace
 class LogInScreen : Screen {
     @Composable
     override fun Content() {
-        LogInScreeContent()
+        val viewModel: LoginContract.ViewModel = getViewModel<LoginViewModel>()
+        LogInScreeContent(
+            viewModel.collectAsState().value, viewModel::eventDispatcher
+        )
     }
 }
 
 @Composable
-fun LogInScreeContent() {
+fun LogInScreeContent(
+    uiState: LoginContract.UIState,
+    eventDispatcher: (LoginContract.Intent) -> Unit
+) {
     Column(
         modifier = Modifier.fillMaxSize(),
         horizontalAlignment = Alignment.CenterHorizontally
@@ -79,23 +88,21 @@ fun LogInScreeContent() {
                 .align(Alignment.Start)
                 .padding(start = 24.dp, bottom = 4.dp)
         )
-        var firstName by remember { mutableStateOf("") }
-        OutlinedTextField(
-            keyboardOptions = KeyboardOptions(
-                capitalization = KeyboardCapitalization.Sentences,
-                imeAction = ImeAction.Next
-            ),
+        var fullName by remember { mutableStateOf("") }
+        OutlinedTextField(keyboardOptions = KeyboardOptions(
+            capitalization = KeyboardCapitalization.Sentences,
+            imeAction = ImeAction.Next
+        ),
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(horizontal = 24.dp),
-            value = firstName,
-            onValueChange = { firstName = it })
+            value = fullName,
+            onValueChange = { fullName = it })
 
         Spacer(modifier = Modifier.height(16.dp))
 
-
         Text(
-            text = "Last name",
+            text = "Phone number",
             color = Color.Black,
             fontSize = 14.sp,
             fontWeight = FontWeight.Bold,
@@ -103,18 +110,18 @@ fun LogInScreeContent() {
                 .align(Alignment.Start)
                 .padding(start = 24.dp, bottom = 4.dp)
         )
-        var lastName by remember { mutableStateOf("") }
-        OutlinedTextField(
-            keyboardOptions = KeyboardOptions(
-                capitalization = KeyboardCapitalization.Sentences,
-                imeAction = ImeAction.Next
-            ),
+
+        var phone by remember { mutableStateOf("") }
+        OutlinedTextField(keyboardOptions = KeyboardOptions(
+            capitalization = KeyboardCapitalization.Sentences,
+            imeAction = ImeAction.Next,
+            keyboardType = KeyboardType.Phone
+        ),
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(horizontal = 24.dp),
-            value = lastName,
-            onValueChange = { lastName = it }
-        )
+            value = phone,
+            onValueChange = { phone = it })
 
         Spacer(modifier = Modifier.height(16.dp))
 
@@ -129,11 +136,10 @@ fun LogInScreeContent() {
         )
         var password by remember { mutableStateOf("") }
         var showPassword by remember { mutableStateOf(false) }
-        OutlinedTextField(
-            keyboardOptions = KeyboardOptions(
-                capitalization = KeyboardCapitalization.Sentences,
-                imeAction = ImeAction.Done
-            ),
+        OutlinedTextField(keyboardOptions = KeyboardOptions(
+            capitalization = KeyboardCapitalization.Sentences,
+            imeAction = ImeAction.Done
+        ),
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(horizontal = 24.dp),
@@ -145,25 +151,18 @@ fun LogInScreeContent() {
                 PasswordVisualTransformation()
             },
             trailingIcon = {
-                IconButton(
-                    onClick = { showPassword = !showPassword },
+                IconButton(onClick = { showPassword = !showPassword },
                     content = {
-                        Icon(
-                            modifier = Modifier
-                                .clickable {
-                                    showPassword = !showPassword
-                                }
-                                .size(24.dp),
-                            painter = painterResource(
-                                id = if (showPassword) R.drawable.eye
-                                else R.drawable.hidden
-                            ),
-                            contentDescription = "icon"
-                        )
-                    }
-                )
-            }
-        )
+                        Icon(modifier = Modifier
+                            .clickable {
+                                showPassword = !showPassword
+                            }
+                            .size(24.dp), painter = painterResource(
+                            id = if (showPassword) R.drawable.eye
+                            else R.drawable.hidden
+                        ), contentDescription = "icon")
+                    })
+            })
 
         Spacer(
             modifier = Modifier
@@ -178,6 +177,7 @@ fun LogInScreeContent() {
             onClicked = {
                 enabled = false
                 isLoading = true
+                eventDispatcher(LoginContract.Intent.Login(phone, password))
             },
             enabled = enabled,
             isLoading = isLoading,

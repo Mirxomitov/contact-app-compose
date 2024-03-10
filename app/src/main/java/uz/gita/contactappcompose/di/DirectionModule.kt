@@ -4,6 +4,8 @@ import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
+import uz.gita.contactappcompose.screens.login.LoginContract
+import uz.gita.contactappcompose.screens.login.LoginDirections
 import uz.gita.contactappcompose.screens.main.MainContract
 import uz.gita.contactappcompose.screens.main.MainDirections
 import uz.gita.contactappcompose.screens.splash.SplashContract
@@ -17,4 +19,7 @@ interface DirectionModule {
 
     @Binds
     fun bindMainDirection(direction : MainDirections) : MainContract.Direction
+
+    @Binds
+    fun bindLoginDirection(direction : LoginDirections) : LoginContract.Direction
 }
