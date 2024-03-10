@@ -37,6 +37,7 @@ import cafe.adriel.voyager.hilt.getViewModel
 import org.orbitmvi.orbit.compose.collectAsState
 import uz.gita.contactappcompose.R
 import uz.gita.contactappcompose.ui.components.ButtonComponent
+import uz.gita.contactappcompose.ui.components.ClickableText
 import uz.gita.contactappcompose.ui.components.HeightSpace
 
 class LogInScreen : Screen {
@@ -76,28 +77,6 @@ fun LogInScreeContent(
             fontSize = 24.sp,
             fontWeight = FontWeight.Bold,
         )
-
-        Spacer(modifier = Modifier.height(16.dp))
-
-        Text(
-            text = "First name",
-            color = Color.Black,
-            fontSize = 14.sp,
-            fontWeight = FontWeight.Bold,
-            modifier = Modifier
-                .align(Alignment.Start)
-                .padding(start = 24.dp, bottom = 4.dp)
-        )
-        var fullName by remember { mutableStateOf("") }
-        OutlinedTextField(keyboardOptions = KeyboardOptions(
-            capitalization = KeyboardCapitalization.Sentences,
-            imeAction = ImeAction.Next
-        ),
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 24.dp),
-            value = fullName,
-            onValueChange = { fullName = it })
 
         Spacer(modifier = Modifier.height(16.dp))
 
@@ -183,12 +162,10 @@ fun LogInScreeContent(
             isLoading = isLoading,
             modifier = Modifier.padding(24.dp)
         )
+
+        ClickableText(
+            fullText = "Don't have an account? Register",
+            clickableText = "Register",
+            onClick = { eventDispatcher(LoginContract.Intent.Register) })
     }
-}
-
-
-@Preview
-@Composable
-fun LogInScreePreview() {
-
 }

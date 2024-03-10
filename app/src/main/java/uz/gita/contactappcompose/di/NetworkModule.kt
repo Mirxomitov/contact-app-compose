@@ -25,7 +25,10 @@ class NetworkModule {
     fun provideGson(): Gson = Gson()
 
     @[Provides Singleton]
-    fun provideOkHttp(@ApplicationContext context: Context, networkStatusValidator: NetworkStatusValidator): OkHttpClient {
+    fun provideOkHttp(
+        @ApplicationContext context: Context,
+        networkStatusValidator: NetworkStatusValidator
+    ): OkHttpClient {
         val cacheSize = (50 * 1024 * 1024).toLong()  // 50 MB
         val cache = Cache(context.cacheDir, cacheSize)
         val maxStale = 60 * 60 * 24 * 30
@@ -36,7 +39,10 @@ class NetworkModule {
                 if (!networkStatusValidator.hasNetwork) {
                     val newRequest = chain.request()
                         .newBuilder()
-                        .header("Cache-Control", "public, only-if-cached, max-stale=" + maxStale)
+                        .header(
+                            "Cache-Control",
+                            "public, only-if-cached, max-stale=" + maxStale
+                        )
                         .removeHeader("Pragma").build()
                     chain.proceed(newRequest)
                 } else chain.proceed(chain.request())
@@ -48,12 +54,14 @@ class NetworkModule {
     }
 
     @[Provides Singleton]
-    fun provideRetrofit(okHttpClient: OkHttpClient): Retrofit = Retrofit.Builder()
-        .baseUrl("https://5db2-195-158-16-140.ngrok-free.app/")
-        .addConverterFactory(GsonConverterFactory.create())
-        .client(okHttpClient)
-        .build()
+    fun provideRetrofit(okHttpClient: OkHttpClient): Retrofit =
+        Retrofit.Builder()
+            .baseUrl("https://5db2-195-158-16-140.ngrok-free.app/")
+            .addConverterFactory(GsonConverterFactory.create())
+            .client(okHttpClient)
+            .build()
 
     @[Provides Singleton]
-    fun provideContactApi(retrofit: Retrofit): ContactApi = retrofit.create(ContactApi::class.java)
+    fun provideContactApi(retrofit: Retrofit): ContactApi =
+        retrofit.create(ContactApi::class.java)
 }

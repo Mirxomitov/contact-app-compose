@@ -1,17 +1,17 @@
-package uz.gita.contactappcompose.screens.login
+package uz.gita.contactappcompose.screens.register
 
+import uz.gita.contactappcompose.screens.login.LogInScreen
 import uz.gita.contactappcompose.screens.main.MainScreen
-import uz.gita.contactappcompose.screens.register.RegisterScreen
 import uz.gita.contactappcompose.utils.navigation.AppNavigator
 import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class LoginDirections @Inject constructor(
+class RegisterDirections @Inject constructor(
     private val navigator: AppNavigator
-) : LoginContract.Direction {
-    override suspend fun toRegisterScreen() {
-        navigator.replace(RegisterScreen())
+) : RegisterContract.Direction {
+    override suspend fun toLoginScreen() {
+        navigator.replace(LogInScreen())
     }
 
     override suspend fun toMainScreen() {

@@ -7,7 +7,9 @@ import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
 import uz.gita.contactappcompose.data.model.StartScreenEnum
 import uz.gita.contactappcompose.data.model.remote.request.LogInRequestData
+import uz.gita.contactappcompose.data.model.remote.request.RegisterRequestData
 import uz.gita.contactappcompose.data.model.remote.response.LogInResponseData
+import uz.gita.contactappcompose.data.model.remote.response.RegisterResponseData
 import uz.gita.contactappcompose.data.source.local.SharedPreference
 import uz.gita.contactappcompose.data.source.remote.api.ContactApi
 import uz.gita.contactappcompose.domain.IdentificationRepository
@@ -36,7 +38,18 @@ class IdentificationRepositoryImpl @Inject constructor(
         }
             .flowOn(Dispatchers.IO)
             .catch { emit(Result.failure(Exception("Unknown exception try catch"))) }
+
     override fun saveToken(token: String) {
         sharedPreference.saveToken(token)
     }
+
+    override fun register(data: RegisterRequestData): Flow<Result<RegisterResponseData>> =
+        flow {
+            val response = api.registerUser(data)
+            if (response.isSuccessful && response.body() != null) {
+                emit(Result.success(response.body()!!))
+            } else emit(Result.failure(Exception("Unknown exception failure")))
+        }
+            .flowOn(Dispatchers.IO)
+            .catch { emit(Result.failure(Exception("Unknown exception try catch"))) }
 }
