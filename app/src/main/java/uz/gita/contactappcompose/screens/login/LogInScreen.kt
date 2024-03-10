@@ -166,6 +166,9 @@ fun LogInScreeContent(
         ClickableText(
             fullText = "Don't have an account? Register",
             clickableText = "Register",
-            onClick = { eventDispatcher(LoginContract.Intent.Register) })
+            onClick = { eventDispatcher(LoginContract.Intent.Register) }
+        )
+
+        HeightSpace(height = 16)
     }
 }

@@ -1,5 +1,6 @@
 package uz.gita.contactappcompose.ui.items
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -20,6 +21,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import uz.gita.contactappcompose.data.model.ContactUIData
+import uz.gita.contactappcompose.ui.components.WidthSpace
 import uz.gita.contactappcompose.ui.theme.ColorContactItemCircle
 import uz.gita.contactappcompose.ui.theme.ColorContactItemText
 
@@ -35,9 +37,8 @@ fun ContactItem(contact: ContactUIData) {
         Box(
             modifier = Modifier
                 .size(64.dp)
-                .border(
+                .background(
                     shape = CircleShape,
-                    width = 0.dp,
                     color = ColorContactItemCircle,
                 ),
             contentAlignment = Alignment.Center,
@@ -51,7 +52,7 @@ fun ContactItem(contact: ContactUIData) {
                 }
             }
         )
-
+        WidthSpace(width = 12)
         Column(
             modifier = Modifier
                 .fillMaxHeight()

@@ -12,5 +12,5 @@ val Pink40 = Color(0xFF7D5260)
 
 // My colors:
 val BlackColor = Color(0xFF181818)
-val ColorContactItemCircle = Color(0xFF838383)
+val ColorContactItemCircle = Color(0xFFDEDEDE)
 val ColorContactItemText = Color(0xFF4D4D4D)

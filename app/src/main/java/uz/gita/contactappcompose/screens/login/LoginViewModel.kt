@@ -33,7 +33,9 @@ class LoginViewModel @Inject constructor(
                             navigation.toMainScreen()
                         }
                         it.onFailure {
-                            logger(it.message ?: "")
+                            logger(
+                                ("LoginContract.Intent.Login" + it.message)
+                            )
                         }
                     }
                     .launchIn(viewModelScope)

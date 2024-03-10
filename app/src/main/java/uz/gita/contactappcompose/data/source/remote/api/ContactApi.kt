@@ -12,7 +12,7 @@ import uz.gita.contactappcompose.data.model.remote.response.VerifyResponseData
 
 interface ContactApi {
 
-    @POST("api/v1/register/")
+    @POST("api/v1/register")
     suspend fun registerUser(
         @Body data: RegisterRequestData
     ): Response<RegisterResponseData>
@@ -22,7 +22,7 @@ interface ContactApi {
         @Body data: VerifyRequestData
     ): Response<VerifyResponseData>
 
-    @POST("api/v1/login/")
+    @POST("api/v1/login")
     suspend fun logIn(
         @Body data: LogInRequestData
     ): Response<LogInResponseData>
