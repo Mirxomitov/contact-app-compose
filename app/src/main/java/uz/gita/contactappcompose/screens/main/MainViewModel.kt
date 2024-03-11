@@ -6,6 +6,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import org.orbitmvi.orbit.syntax.simple.intent
+import org.orbitmvi.orbit.syntax.simple.postSideEffect
 import org.orbitmvi.orbit.syntax.simple.reduce
 import org.orbitmvi.orbit.viewmodel.container
 import uz.gita.contactappcompose.domain.ContactRepository
@@ -15,7 +16,7 @@ import javax.inject.Inject
 @HiltViewModel
 class MainViewModel @Inject constructor(
     private val repository: ContactRepository,
-    private val direction: MainContract.Direction
+    private val navigator: MainContract.Direction
 ) : MainContract.ViewModel, ViewModel() {
 
     init {
@@ -24,9 +25,18 @@ class MainViewModel @Inject constructor(
 
     override fun onEventDispatchers(intent: MainContract.Intent) = intent {
         when (intent) {
-            MainContract.Intent.AddContact -> {}
-            is MainContract.Intent.EditContact -> {}
-            is MainContract.Intent.Reload -> {}
+            MainContract.Intent.AddContact -> {
+                navigator.openAddContact()
+            }
+            is MainContract.Intent.EditContact -> {
+                navigator.openEditContact()
+            }
+            is MainContract.Intent.Reload -> {
+                loadContacts()
+            }
+            is MainContract.Intent.OpenBottomDialog -> {
+                postSideEffect(MainContract.SideEffect.OpenBottomDialog(intent.contact))
+            }
         }
     }
 

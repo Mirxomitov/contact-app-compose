@@ -1,6 +1,7 @@
 package uz.gita.contactappcompose.screens.main
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -25,12 +26,15 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.hilt.getViewModel
+import cafe.adriel.voyager.navigator.bottomSheet.LocalBottomSheetNavigator
 import org.orbitmvi.orbit.compose.collectAsState
+import org.orbitmvi.orbit.compose.collectSideEffect
 import uz.gita.contactappcompose.ui.components.WidthSpace
 import uz.gita.contactappcompose.ui.items.ContactItem
 import uz.gita.contactappcompose.ui.theme.BlackColor
@@ -39,6 +43,18 @@ class MainScreen : Screen {
     @Composable
     override fun Content() {
         val viewModel: MainContract.ViewModel = getViewModel<MainViewModel>()
+        val context = LocalContext.current
+        val localBottomSheetNavigator = LocalBottomSheetNavigator.current
+
+        viewModel.collectSideEffect { sideEffect ->
+            when (sideEffect) {
+                is MainContract.SideEffect.OpenBottomDialog -> {
+                    //localBottomSheetNavigator.show()
+                }
+            }
+        }
+
+
         MainScreenContent(
             viewModel.collectAsState().value,
             viewModel::onEventDispatchers
@@ -79,7 +95,9 @@ fun MainScreenContent(
                     tint = BlackColor,
                     imageVector = Icons.Default.Add,
                     contentDescription = "add icon",
-                    modifier = Modifier.size(24.dp)
+                    modifier = Modifier.size(24.dp).clickable {
+                        eventDispatcher(MainContract.Intent.AddContact)
+                    }
                 )
                 WidthSpace(width = 8)
 

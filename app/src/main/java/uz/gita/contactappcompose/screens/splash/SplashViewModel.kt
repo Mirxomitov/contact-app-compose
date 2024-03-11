@@ -22,7 +22,7 @@ class SplashViewModel @Inject constructor(
 
     init {
         viewModelScope.launch {
-            delay(1000)
+            delay(3000)
             when (repository.startScreen()) {
                 StartScreenEnum.Login -> direction.openLogInScreen()
                 StartScreenEnum.Main -> direction.openMainScreen()

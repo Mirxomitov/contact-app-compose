@@ -6,6 +6,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import org.orbitmvi.orbit.syntax.simple.intent
+import org.orbitmvi.orbit.syntax.simple.reduce
 import org.orbitmvi.orbit.viewmodel.container
 import uz.gita.contactappcompose.data.model.remote.request.LogInRequestData
 import uz.gita.contactappcompose.domain.IdentificationRepository
@@ -33,14 +34,17 @@ class LoginViewModel @Inject constructor(
                             navigation.toMainScreen()
                         }
                         it.onFailure {
-                            logger(
-                                ("LoginContract.Intent.Login" + it.message)
-                            )
+                            logger(("LoginContract.Intent.Login" + it.message))
+                            reduce { LoginContract.UIState.LoginEnabled }
                         }
                     }
                     .launchIn(viewModelScope)
+
             }
 
+            LoginContract.Intent.LoginEnabled -> {
+                intent { reduce {LoginContract.UIState.LoginEnabled} }
+            }
 
             LoginContract.Intent.Register -> {
                 navigation.toRegisterScreen()

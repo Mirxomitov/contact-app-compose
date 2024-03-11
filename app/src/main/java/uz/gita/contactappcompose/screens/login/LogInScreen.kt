@@ -1,5 +1,6 @@
 package uz.gita.contactappcompose.screens.login
 
+import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
@@ -22,6 +23,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
@@ -29,7 +31,6 @@ import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import cafe.adriel.voyager.core.screen.Screen
@@ -151,6 +152,13 @@ fun LogInScreeContent(
 
         var enabled by remember { mutableStateOf(true) }
         var isLoading by remember { mutableStateOf(false) }
+
+        if(uiState == LoginContract.UIState.LoginEnabled) {
+            isLoading = false
+            enabled = true
+            Toast.makeText(LocalContext.current, "Login Error", Toast.LENGTH_SHORT).show()
+        }
+
         ButtonComponent(
             text = "Login",
             onClicked = {

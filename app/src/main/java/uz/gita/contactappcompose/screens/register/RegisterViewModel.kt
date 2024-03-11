@@ -36,6 +36,7 @@ class RegisterViewModel @Inject constructor(
                         }
                         it.onFailure {
                             logger(it.message ?: "")
+
                         }
                     }
                     .launchIn(viewModelScope)

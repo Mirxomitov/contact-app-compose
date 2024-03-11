@@ -9,7 +9,9 @@ interface MainContract {
         fun loadContacts()
     }
 
-    interface SideEffect {}
+    interface SideEffect {
+        data class OpenBottomDialog(val contact: ContactUIData) : SideEffect
+    }
     interface UIState {
         object EmptyState: UIState
         data class Contacts(
@@ -21,6 +23,7 @@ interface MainContract {
         object Reload : Intent
         object AddContact : Intent
         data class EditContact(val contact : ContactUIData) : Intent
+        data class OpenBottomDialog(val contact: ContactUIData) : Intent
     }
 
     interface Direction {
