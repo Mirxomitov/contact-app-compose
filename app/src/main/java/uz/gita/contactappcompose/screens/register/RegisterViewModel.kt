@@ -32,7 +32,8 @@ class RegisterViewModel @Inject constructor(
                     .onEach {
                         it.onSuccess {
                             logger(it.message)
-                            navigation.toMainScreen()
+                            repository.saveToken(it.message)
+                            navigation.toVerifyScreen(intent.phone)
                         }
                         it.onFailure {
                             logger(it.message ?: "")

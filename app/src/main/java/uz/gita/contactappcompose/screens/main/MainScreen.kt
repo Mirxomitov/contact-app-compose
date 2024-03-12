@@ -35,7 +35,9 @@ import cafe.adriel.voyager.hilt.getViewModel
 import cafe.adriel.voyager.navigator.bottomSheet.LocalBottomSheetNavigator
 import org.orbitmvi.orbit.compose.collectAsState
 import org.orbitmvi.orbit.compose.collectSideEffect
+import uz.gita.contactappcompose.data.model.ContactUIData
 import uz.gita.contactappcompose.ui.components.WidthSpace
+import uz.gita.contactappcompose.ui.dialog.OptionBottomSheetDialog
 import uz.gita.contactappcompose.ui.items.ContactItem
 import uz.gita.contactappcompose.ui.theme.BlackColor
 
@@ -49,7 +51,16 @@ class MainScreen : Screen {
         viewModel.collectSideEffect { sideEffect ->
             when (sideEffect) {
                 is MainContract.SideEffect.OpenBottomDialog -> {
-                    //localBottomSheetNavigator.show()
+                    localBottomSheetNavigator.show(
+                        OptionBottomSheetDialog(
+                            sideEffect.contact.firstName + " " + sideEffect.contact.lastName,
+                            onDelete = {
+                                viewModel.onEventDispatchers(MainContract.Intent.DeleteContact(sideEffect.contact.id))
+                            },
+                            onCall = {},
+                            onEdit = {},
+                        )
+                    )
                 }
             }
         }
@@ -95,9 +106,11 @@ fun MainScreenContent(
                     tint = BlackColor,
                     imageVector = Icons.Default.Add,
                     contentDescription = "add icon",
-                    modifier = Modifier.size(24.dp).clickable {
-                        eventDispatcher(MainContract.Intent.AddContact)
-                    }
+                    modifier = Modifier
+                        .size(24.dp)
+                        .clickable {
+                            eventDispatcher(MainContract.Intent.AddContact)
+                        }
                 )
                 WidthSpace(width = 8)
 
@@ -122,7 +135,17 @@ fun MainScreenContent(
                     items(uiState.contacts) {
                         ContactItem(
                             contact = it,
-                            onClick = {},
+                            onClick = {
+                                eventDispatcher(
+                                    MainContract.Intent.OpenBottomDialog(
+                                        ContactUIData(
+                                            firstName = it.firstName,
+                                            lastName = it.lastName,
+                                            phoneNumber = it.phoneNumber,
+                                        )
+                                    )
+                                )
+                            },
                             onLongClick = {}
                         )
                     }
@@ -165,3 +188,4 @@ fun EmptyState(addContact: () -> Unit) {
         }
     }
 }
+

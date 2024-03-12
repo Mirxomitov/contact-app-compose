@@ -16,4 +16,6 @@ interface NavigationModule {
 
     @Binds
     fun bindHandler(dispatcher: AppNavigatorDispatcher): AppNavigationHandler
+
+
 }

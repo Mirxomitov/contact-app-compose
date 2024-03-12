@@ -1,24 +1,135 @@
 package uz.gita.contactappcompose.screens.add
 
+import android.widget.Toast
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.input.KeyboardCapitalization
+import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import cafe.adriel.voyager.core.screen.Screen
+import cafe.adriel.voyager.hilt.getViewModel
+import org.orbitmvi.orbit.compose.collectSideEffect
+import uz.gita.contactappcompose.ui.components.AddContactTextField
+import uz.gita.contactappcompose.ui.components.HeightSpace
 
-class AddScreen : Screen {
+class AddScreen(private val doReload: () -> Unit) : Screen {
     @Composable
     override fun Content() {
-        AddScreenContent()
+        val context = LocalContext.current
+        val viewModel = getViewModel<AddViewModel>()
+
+        viewModel.collectSideEffect { sideEffect ->
+            when (sideEffect) {
+                is AddContract.SideEffect.Toast -> {
+                    Toast.makeText(
+                        context, sideEffect.message, Toast.LENGTH_SHORT
+                    ).show()
+                }
+
+                AddContract.SideEffect.ReloadEffect -> doReload.invoke()
+            }
+        }
+
+        AddScreenContent(viewModel::eventDispatcher)
     }
 }
 
 @Composable
-fun AddScreenContent() {
-    Text(text = "ADD SCREEN")
-}
+fun AddScreenContent(
+    eventDispatcher: (AddContract.Intent) -> Unit
+) {
+    var firstName by remember { mutableStateOf("") }
+    var lastName by remember { mutableStateOf("") }
+    var phone by remember { mutableStateOf("") }
 
-@Preview
-@Composable
-fun AddScreenPreview() {
+    Box(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(8.dp)
+            .height(56.dp),
+    ) {
+        Text(text = "Отмена", modifier = Modifier
+            .clickable {
+                eventDispatcher(AddContract.Intent.Back)
+            }
+            .align(Alignment.CenterStart), fontSize = 16.sp)
+        Text(
+            text = "Создать контакт",
+            modifier = Modifier.align(Alignment.Center),
+            fontSize = 12.sp
+        )
+
+        TextButton(
+            enabled = (firstName.length > 3) && (lastName.length > 3)
+                    && (phone.length == 13)
+                    && phone.startsWith("+998")
+                    && phone.contains(Regex("^[0-9+]+$"))
+                    && (phone.indexOf("+") == 0),
+            modifier = Modifier.align(Alignment.CenterEnd),
+            onClick = {
+                eventDispatcher(
+                    AddContract.Intent.AddContact(
+                        firstName, lastName, phone
+                    )
+                )
+            }) {
+            Text(
+                text = "Готово", fontSize = 16.sp
+            )
+        }
+    }
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(top = 56.dp),
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        AddContactTextField(
+            label = "Имя",
+            value = firstName,
+            onValueChange = {
+                firstName = it
+            },
+            labelColor = Color.Black,
+            keyboardOptions = KeyboardOptions(capitalization = KeyboardCapitalization.Words)
+        )
+        HeightSpace(height = 12)
+        AddContactTextField(
+            label = "Фамилия",
+            value = lastName,
+            onValueChange = {
+                lastName = it
+            },
+            labelColor = Color.Black,
+            keyboardOptions = KeyboardOptions(capitalization = KeyboardCapitalization.Words)
+        )
+        HeightSpace(height = 12)
+        AddContactTextField(
+            label = "Телефон", value = phone, onValueChange = {
+                phone = it
+            }, labelColor = Color.Black, keyboardOptions = KeyboardOptions(
+                capitalization = KeyboardCapitalization.Words,
+                keyboardType = KeyboardType.Phone
+            )
+        )
+    }
 
 }

@@ -26,14 +26,19 @@ class MainViewModel @Inject constructor(
     override fun onEventDispatchers(intent: MainContract.Intent) = intent {
         when (intent) {
             MainContract.Intent.AddContact -> {
-                navigator.openAddContact()
+                navigator.openAddContact {
+                    loadContacts()
+                }
             }
+
             is MainContract.Intent.EditContact -> {
                 navigator.openEditContact()
             }
+
             is MainContract.Intent.Reload -> {
                 loadContacts()
             }
+
             is MainContract.Intent.OpenBottomDialog -> {
                 postSideEffect(MainContract.SideEffect.OpenBottomDialog(intent.contact))
             }

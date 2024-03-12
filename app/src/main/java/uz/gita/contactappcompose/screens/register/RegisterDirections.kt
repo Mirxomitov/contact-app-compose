@@ -2,6 +2,7 @@ package uz.gita.contactappcompose.screens.register
 
 import uz.gita.contactappcompose.screens.login.LogInScreen
 import uz.gita.contactappcompose.screens.main.MainScreen
+import uz.gita.contactappcompose.screens.verify.VerifyScreen
 import uz.gita.contactappcompose.utils.navigation.AppNavigator
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -14,7 +15,8 @@ class RegisterDirections @Inject constructor(
         navigator.replace(LogInScreen())
     }
 
-    override suspend fun toMainScreen() {
-        navigator.replace(MainScreen())
+    override suspend fun toVerifyScreen(phone : String) {
+        navigator.push(VerifyScreen(phone))
     }
+
 }

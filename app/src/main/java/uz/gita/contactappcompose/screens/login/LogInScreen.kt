@@ -116,7 +116,8 @@ fun LogInScreeContent(
         )
         var password by remember { mutableStateOf("") }
         var showPassword by remember { mutableStateOf(false) }
-        OutlinedTextField(keyboardOptions = KeyboardOptions(
+        OutlinedTextField(
+            keyboardOptions = KeyboardOptions(
             capitalization = KeyboardCapitalization.Sentences,
             imeAction = ImeAction.Done
         ),

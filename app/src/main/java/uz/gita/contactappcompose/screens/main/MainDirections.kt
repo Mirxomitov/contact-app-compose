@@ -10,8 +10,8 @@ import javax.inject.Singleton
 class MainDirections @Inject constructor(
     private val navigator: AppNavigator
 ) : MainContract.Direction {
-    override suspend fun openAddContact() {
-        navigator.push(AddScreen())
+    override suspend fun openAddContact(doReload: () -> Unit) {
+        navigator.push(AddScreen(doReload))
     }
 
     override suspend fun openEditContact() {

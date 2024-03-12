@@ -8,7 +8,7 @@ import cafe.adriel.voyager.core.screen.Screen
 class EditScreen : Screen {
     @Composable
     override fun Content() {
-EditScreenContent()
+        EditScreenContent()
     }
 }
 
