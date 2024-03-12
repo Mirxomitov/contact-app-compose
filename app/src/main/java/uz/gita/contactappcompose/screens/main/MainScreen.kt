@@ -55,9 +55,13 @@ class MainScreen : Screen {
                         OptionBottomSheetDialog(
                             sideEffect.contact.firstName + " " + sideEffect.contact.lastName,
                             onDelete = {
-                                viewModel.onEventDispatchers(MainContract.Intent.DeleteContact(sideEffect.contact.id))
+                                viewModel.onEventDispatchers(
+                                    MainContract.Intent.DeleteContact(
+                                        sideEffect.contact.id
+                                    )
+                                )
                             },
-                            onCall = {},
+                            onCall = {viewModel.onEventDispatchers(MainContract.Intent.Call)},
                             onEdit = {},
                         )
                     )

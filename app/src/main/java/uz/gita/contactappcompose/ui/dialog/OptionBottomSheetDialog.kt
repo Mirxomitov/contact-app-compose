@@ -52,7 +52,8 @@ fun OptionBottomSheetDialogContent(
     onDelete: () -> Unit,
     onHide: () -> Unit
 ) {
-    Column (horizontalAlignment = Alignment.CenterHorizontally) {
+    Column(horizontalAlignment = Alignment.CenterHorizontally) {
+        HeightSpace(height = 12)
         Text(text = title, fontSize = 18.sp, fontWeight = FontWeight.Bold)
         HeightSpace(height = 4)
         Row(modifier = Modifier.fillMaxWidth()) {
@@ -60,7 +61,10 @@ fun OptionBottomSheetDialogContent(
                 modifier = Modifier
                     .weight(1f)
                     .height(72.dp),
-                onClick = onDelete,
+                onClick = {
+                    onDelete()
+                    onHide()
+                },
                 res = R.drawable.baseline_delete_outline_24,
                 iconText = "Удалить"
             )
@@ -69,7 +73,10 @@ fun OptionBottomSheetDialogContent(
                 modifier = Modifier
                     .weight(1f)
                     .height(72.dp),
-                onClick = onEdit,
+                onClick = {
+                    onEdit()
+                    onHide()
+                },
                 res = R.drawable.baseline_mode_edit_24,
                 iconText = "Изменить"
             )
@@ -78,7 +85,10 @@ fun OptionBottomSheetDialogContent(
                 modifier = Modifier
                     .weight(1f)
                     .height(72.dp),
-                onClick = onCall,
+                onClick = {
+                    onCall()
+                    onHide()
+                },
                 res = R.drawable.call,
                 iconText = "Вызов"
             )
@@ -95,6 +105,7 @@ private fun Item(
 ) {
     Column(
         modifier = modifier,
+        horizontalAlignment = Alignment.CenterHorizontally
     ) {
         IconButton(onClick = onClick) {
             Icon(
