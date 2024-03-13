@@ -10,9 +10,9 @@ fun logger(msg: String, tag: String = "TTT") {
     Log.d(tag, msg)
 }
 
-class MaskTransformation : VisualTransformation {
+class MaskTransformation(): VisualTransformation {
     override fun filter(text: AnnotatedString): TransformedText {
-        return maskFilter(text)
+        return maskFilter(text )
     }
 }
 
@@ -30,6 +30,7 @@ fun maskFilter(text: AnnotatedString): TransformedText {
                 0 -> {
                     out.append("(")
                 }
+
                 5 -> {
                     out.append("-")
                 }
@@ -47,7 +48,7 @@ fun maskFilter(text: AnnotatedString): TransformedText {
             // (XX)   XXX  XX   XX
             // 0 1 2  3-5  5-6  7-8
             if (offset == 0) return 0
-            if (offset <= 1) return offset + 1 // '(9'
+            if (offset <= 2) return offset + 1 // '(9'
             if (offset <= 5) return offset + 3 // '(99) '
             if (offset in 6..7) return offset + 4
             if (offset in 8..9) return offset + 5
@@ -55,11 +56,12 @@ fun maskFilter(text: AnnotatedString): TransformedText {
         }
 
         override fun transformedToOriginal(offset: Int): Int {
+
             if (offset == 0) return 0
-            if (offset <= 1) return offset - 1
-            if (offset <= 5) return offset - 3
-            if (offset in 6..7) return offset - 4
-//            if (offset in 8..9) return offset - 5
+            if (offset <= 2) return offset - 0
+            if (offset <= 5) return offset - 2
+            if (offset <= 7) return offset - 3
+            if (offset <= 9) return offset - 4
             return offset - 5
         }
     }

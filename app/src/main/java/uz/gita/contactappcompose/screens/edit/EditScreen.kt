@@ -149,17 +149,18 @@ fun EditScreenContent(
         HeightSpace(height = 8)
 
         val maxLength = 9
-        OutlinedTextField(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 16.dp),
+        OutlinedTextField(modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 16.dp),
             value = phone,
             onValueChange = {
-                if (it.length < maxLength) {
+                if (it.length <= maxLength) {
                     phone = it.filter { it.isDigit() }
                 }
             },
-            prefix = { Text(text = "+998") },
+            prefix = {
+                Text(text = "+998")
+            },
             keyboardOptions = KeyboardOptions(
                 capitalization = KeyboardCapitalization.Sentences,
                 keyboardType = KeyboardType.Phone,
@@ -172,8 +173,7 @@ fun EditScreenContent(
                     text = "${phone.length}/$maxLength",
                     color = if (phone.length == maxLength) Color.Green else Color.Black,
                 )
-            }
-        )
+            })
     }
 }
 

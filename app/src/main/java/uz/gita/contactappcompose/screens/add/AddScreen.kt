@@ -156,6 +156,6 @@ fun AddScreenContent(
                     text = "${phone.length}/$maxLength",
                     color = if (phone.length == maxLength) Color.Green else Color.Black,
                 )
-            }   )
+            })
     }
 }
