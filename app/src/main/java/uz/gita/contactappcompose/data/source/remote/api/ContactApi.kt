@@ -2,15 +2,20 @@ package uz.gita.contactappcompose.data.source.remote.api
 
 import retrofit2.Response
 import retrofit2.http.Body
+import retrofit2.http.DELETE
 import retrofit2.http.GET
 import retrofit2.http.Header
 import retrofit2.http.POST
+import retrofit2.http.PUT
+import retrofit2.http.Query
 import uz.gita.contactappcompose.data.model.remote.request.AddContactRequest
+import uz.gita.contactappcompose.data.model.remote.request.EditContactRequest
 import uz.gita.contactappcompose.data.model.remote.request.LogInRequestData
 import uz.gita.contactappcompose.data.model.remote.request.RegisterRequestData
 import uz.gita.contactappcompose.data.model.remote.request.VerifyRequestData
 import uz.gita.contactappcompose.data.model.remote.response.AddContactResponse
 import uz.gita.contactappcompose.data.model.remote.response.ContactResponse
+import uz.gita.contactappcompose.data.model.remote.response.EditContactResponse
 import uz.gita.contactappcompose.data.model.remote.response.LogInResponseData
 import uz.gita.contactappcompose.data.model.remote.response.RegisterResponseData
 import uz.gita.contactappcompose.data.model.remote.response.VerifyResponseData
@@ -40,4 +45,15 @@ interface ContactApi {
         @Header("token") token: String,
         @Body data: AddContactRequest
     ): Response<AddContactResponse>
+
+    @DELETE("api/v1/contact")
+    suspend fun deleteContact(
+        @Header("token") token: String, @Query("id") id: String
+    ): Response<ContactResponse>
+
+    @PUT("api/v1/contact")
+    suspend fun editContact(
+        @Header("token") token: String,
+        @Body data: EditContactRequest
+    ): Response<EditContactResponse>
 }

@@ -1,5 +1,6 @@
 package uz.gita.contactappcompose.screens.main
 
+import uz.gita.contactappcompose.data.model.ContactUIData
 import uz.gita.contactappcompose.screens.add.AddScreen
 import uz.gita.contactappcompose.screens.edit.EditScreen
 import uz.gita.contactappcompose.utils.navigation.AppNavigator
@@ -14,7 +15,7 @@ class MainDirections @Inject constructor(
         navigator.push(AddScreen(doReload))
     }
 
-    override suspend fun openEditContact() {
-        navigator.push(EditScreen())
+    override suspend fun openEditContact(data : ContactUIData) {
+        navigator.push(EditScreen(data))
     }
 }

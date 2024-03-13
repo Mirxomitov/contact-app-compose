@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
@@ -20,6 +21,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
@@ -29,6 +31,7 @@ import cafe.adriel.voyager.hilt.getViewModel
 import org.orbitmvi.orbit.compose.collectSideEffect
 import uz.gita.contactappcompose.ui.components.AddContactTextField
 import uz.gita.contactappcompose.ui.components.HeightSpace
+import uz.gita.contactappcompose.utils.MaskTransformation
 
 class AddScreen(private val doReload: () -> Unit) : Screen {
     @Composable
@@ -102,6 +105,7 @@ fun AddScreenContent(
             .padding(top = 56.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
+        HeightSpace(height = 12)
         AddContactTextField(
             label = "Имя",
             value = firstName,
@@ -119,16 +123,45 @@ fun AddScreenContent(
                 lastName = it
             },
             labelColor = Color.Black,
-            keyboardOptions = KeyboardOptions(capitalization = KeyboardCapitalization.Words)
+            keyboardOptions = KeyboardOptions(capitalization = KeyboardCapitalization.Words),
         )
         HeightSpace(height = 12)
-        AddContactTextField(
-            label = "Телефон", value = phone, onValueChange = {
-                phone = it
-            }, labelColor = Color.Black, keyboardOptions = KeyboardOptions(
-                capitalization = KeyboardCapitalization.Words,
-                keyboardType = KeyboardType.Phone
-            )
+//        AddContactTextField(
+//            label = "Телефон", value = phone, onValueChange = {
+//                phone = it
+//            }, labelColor = Color.Black, keyboardOptions = KeyboardOptions(
+//                capitalization = KeyboardCapitalization.Words,
+//                keyboardType = KeyboardType.Phone
+//            )
+//        )
+
+        val maxLength = 9
+        OutlinedTextField(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 16.dp),
+            value = phone,
+            onValueChange = {
+                if (it.length <= maxLength) {
+                    phone = it.filter { it.isDigit() }
+                }
+            },
+            prefix = {
+                Text(text = "+998")
+            },
+            keyboardOptions = KeyboardOptions(
+                capitalization = KeyboardCapitalization.Sentences,
+                keyboardType = KeyboardType.Phone,
+                imeAction = ImeAction.Done
+            ),
+            visualTransformation = MaskTransformation(),
+            singleLine = true,
+            supportingText = {
+                Text(
+                    text = "${phone.length}/$maxLength",
+                    color = if (phone.length == maxLength) Color.Red else Color.Black,
+                )
+            }
         )
     }
 

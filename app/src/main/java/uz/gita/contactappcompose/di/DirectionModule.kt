@@ -6,6 +6,8 @@ import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import uz.gita.contactappcompose.screens.add.AddContract
 import uz.gita.contactappcompose.screens.add.AddDirection
+import uz.gita.contactappcompose.screens.edit.EditContract
+import uz.gita.contactappcompose.screens.edit.EditDirection
 import uz.gita.contactappcompose.screens.login.LoginContract
 import uz.gita.contactappcompose.screens.login.LoginDirections
 import uz.gita.contactappcompose.screens.main.MainContract
@@ -38,6 +40,7 @@ interface DirectionModule {
     @Binds
     fun bindVerifyDirection(direction: VerifyDirection): VerifyContract.Direction
 
-//    @Binds
-//    fun bindVerifyDirection(direction: VerifyDirection): VerifyContract.Direction
+    @Binds
+    fun bindEditDirection(direction: EditDirection): EditContract.Direction
+
 }

@@ -32,7 +32,7 @@ class MainViewModel @Inject constructor(
             }
 
             is MainContract.Intent.EditContact -> {
-                navigator.openEditContact()
+                navigator.openEditContact(intent.contact)
             }
 
             is MainContract.Intent.Reload -> {
@@ -41,6 +41,17 @@ class MainViewModel @Inject constructor(
 
             is MainContract.Intent.OpenBottomDialog -> {
                 postSideEffect(MainContract.SideEffect.OpenBottomDialog(intent.contact))
+            }
+
+            is MainContract.Intent.DeleteContact -> {
+                repository.deleteContact(intent.id).onEach {
+                    it.onSuccess {
+                        loadContacts()
+                    }
+                    it.onFailure {
+
+                    }
+                }.launchIn(viewModelScope)
             }
         }
     }

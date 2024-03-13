@@ -28,7 +28,7 @@ fun AddContactTextField(
     value: String,
     onValueChange: (String) -> Unit,
     labelColor: Color,
-    keyboardOptions: KeyboardOptions
+    keyboardOptions: KeyboardOptions,
 ) {
 
     Box  {

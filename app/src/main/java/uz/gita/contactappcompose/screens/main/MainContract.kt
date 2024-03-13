@@ -24,7 +24,6 @@ interface MainContract {
     interface Intent {
         object Reload : Intent
         object AddContact : Intent
-        data class Call(val phoneNumber: String) : Intent
         data class DeleteContact(val id: Int) : Intent
         data class EditContact(val contact: ContactUIData) : Intent
         data class OpenBottomDialog(val contact: ContactUIData) : Intent
@@ -32,6 +31,6 @@ interface MainContract {
 
     interface Direction {
         suspend fun openAddContact(doReload: () -> Unit)
-        suspend fun openEditContact()
+        suspend fun openEditContact(data : ContactUIData)
     }
 }

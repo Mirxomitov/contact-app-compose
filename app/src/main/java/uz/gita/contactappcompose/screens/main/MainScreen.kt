@@ -1,5 +1,10 @@
 package uz.gita.contactappcompose.screens.main
 
+import android.Manifest
+import android.content.Context
+import android.content.Intent
+import android.content.pm.PackageManager
+import android.net.Uri
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
@@ -30,22 +35,26 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.hilt.getViewModel
 import cafe.adriel.voyager.navigator.bottomSheet.LocalBottomSheetNavigator
 import org.orbitmvi.orbit.compose.collectAsState
 import org.orbitmvi.orbit.compose.collectSideEffect
-import uz.gita.contactappcompose.data.model.ContactUIData
+import uz.gita.contactappcompose.MainActivity
 import uz.gita.contactappcompose.ui.components.WidthSpace
 import uz.gita.contactappcompose.ui.dialog.OptionBottomSheetDialog
 import uz.gita.contactappcompose.ui.items.ContactItem
 import uz.gita.contactappcompose.ui.theme.BlackColor
+import uz.gita.contactappcompose.utils.logger
 
 class MainScreen : Screen {
     @Composable
     override fun Content() {
-        val viewModel: MainContract.ViewModel = getViewModel<MainViewModel>()
         val context = LocalContext.current
+
+        val viewModel: MainContract.ViewModel = getViewModel<MainViewModel>()
         val localBottomSheetNavigator = LocalBottomSheetNavigator.current
 
         viewModel.collectSideEffect { sideEffect ->
@@ -61,8 +70,16 @@ class MainScreen : Screen {
                                     )
                                 )
                             },
-                            onCall = {viewModel.onEventDispatchers(MainContract.Intent.Call)},
-                            onEdit = {},
+                            onCall = {
+                                checkPermissionAndCall(context, sideEffect)
+                            },
+                            onEdit = {
+                                viewModel.onEventDispatchers(
+                                    MainContract.Intent.EditContact(
+                                        sideEffect.contact
+                                    )
+                                )
+                            },
                         )
                     )
                 }
@@ -142,11 +159,7 @@ fun MainScreenContent(
                             onClick = {
                                 eventDispatcher(
                                     MainContract.Intent.OpenBottomDialog(
-                                        ContactUIData(
-                                            firstName = it.firstName,
-                                            lastName = it.lastName,
-                                            phoneNumber = it.phoneNumber,
-                                        )
+                                        it
                                     )
                                 )
                             },
@@ -193,3 +206,41 @@ fun EmptyState(addContact: () -> Unit) {
     }
 }
 
+
+private fun checkPermissionAndCall(
+    context: Context,
+    sideEffect: MainContract.SideEffect.OpenBottomDialog
+) {
+
+    if (ContextCompat.checkSelfPermission(
+            context,
+            Manifest.permission.CALL_PHONE
+        ) == PackageManager.PERMISSION_GRANTED
+    ) {
+        try {
+            val phone =
+                sideEffect.contact.phoneNumber.replace(
+                    " ",
+                    ""
+                )
+            val callIntent =
+                Intent(Intent.ACTION_CALL)
+            callIntent.data =
+                Uri.parse("tel:$phone")
+            ContextCompat.startActivity(
+                context,
+                callIntent,
+                null
+            )
+            logger("Call done")
+        } catch (_: Exception) {
+            logger("Call failed")
+        }
+    } else {
+        ActivityCompat.requestPermissions(
+            context as MainActivity,
+            arrayOf(Manifest.permission.CALL_PHONE),
+            1,
+        )
+    }
+}
