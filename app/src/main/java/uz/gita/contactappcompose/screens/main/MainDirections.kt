@@ -15,7 +15,7 @@ class MainDirections @Inject constructor(
         navigator.push(AddScreen(doReload))
     }
 
-    override suspend fun openEditContact(data : ContactUIData) {
-        navigator.push(EditScreen(data))
+    override suspend fun openEditContact(data : ContactUIData, doReload: () -> Unit) {
+        navigator.push(EditScreen(data, doReload))
     }
 }

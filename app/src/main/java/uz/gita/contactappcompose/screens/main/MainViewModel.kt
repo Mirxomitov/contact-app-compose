@@ -32,7 +32,7 @@ class MainViewModel @Inject constructor(
             }
 
             is MainContract.Intent.EditContact -> {
-                navigator.openEditContact(intent.contact)
+                navigator.openEditContact(intent.contact, ::loadContacts)
             }
 
             is MainContract.Intent.Reload -> {

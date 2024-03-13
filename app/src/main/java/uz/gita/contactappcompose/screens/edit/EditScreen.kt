@@ -1,5 +1,6 @@
 package uz.gita.contactappcompose.screens.edit
 
+import android.widget.Toast
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -19,6 +20,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.text.input.KeyboardType
@@ -27,15 +29,30 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.hilt.getViewModel
+import org.orbitmvi.orbit.compose.collectSideEffect
 import uz.gita.contactappcompose.data.model.ContactUIData
 import uz.gita.contactappcompose.screens.add.AddContract
 import uz.gita.contactappcompose.ui.components.HeightSpace
 import uz.gita.contactappcompose.utils.MaskTransformation
 
-class EditScreen(private val data: ContactUIData) : Screen {
+class EditScreen(private val data: ContactUIData, private val doReload : () -> Unit) : Screen {
     @Composable
     override fun Content() {
+        val context = LocalContext.current
         val viewModel = getViewModel<EditViewModel>()
+
+        viewModel.collectSideEffect { sideEffect ->
+            when (sideEffect) {
+                is EditContract.SideEffect.Toast -> {
+                    Toast.makeText(
+                        context, sideEffect.message, Toast.LENGTH_SHORT
+                    ).show()
+                }
+
+                EditContract.SideEffect.ReloadEffect -> doReload()
+            }
+        }
+
         EditScreenContent(data, viewModel::eventDispatcher)
     }
 }
@@ -68,10 +85,7 @@ fun EditScreenContent(
 
         TextButton(
             enabled = (firstName.length > 3) && (lastName.length > 3)
-                    && (phone.length == 13)
-                    && phone.startsWith("+998")
-                    && phone.contains(Regex("^[0-9+]+$"))
-                    && (phone.indexOf("+") == 0),
+                    && (phone.length == 9),
             modifier = Modifier.align(Alignment.CenterEnd),
             onClick = {
                 eventDispatcher(

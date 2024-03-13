@@ -27,7 +27,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.hilt.getViewModel
-import org.orbitmvi.orbit.compose.collectAsState
 import uz.gita.contactappcompose.R
 import uz.gita.contactappcompose.ui.components.ButtonComponent
 import uz.gita.contactappcompose.ui.components.HeightSpace
@@ -38,7 +37,7 @@ class VerifyScreen(private val phone: String) : Screen {
     override fun Content() {
         val viewModel = getViewModel<VerifyViewModel>()
         VerifyContent(
-            viewModel.collectAsState().value,
+            phone,
             viewModel::eventDispatcher
         )
     }
@@ -46,7 +45,7 @@ class VerifyScreen(private val phone: String) : Screen {
 
 @Composable
 fun VerifyContent(
-    uiState: VerifyContract.UIState,
+    phone: String,
     eventDispatcher: (VerifyContract.Intent) -> Unit
 ) {
     Column(
@@ -104,7 +103,7 @@ fun VerifyContent(
                 eventDispatcher(
                     VerifyContract.Intent.CheckCode(
                         smsCode,
-                        phone = ""
+                        phone = phone
                     )
                 )
             },
@@ -119,6 +118,6 @@ fun VerifyContent(
 @Composable
 private fun VerifyPreview() {
     ContactAppComposeTheme {
-        VerifyContent(VerifyContract.UIState.InitState, {})
+        VerifyContent("VerifyContract.UIState.InitState", {})
     }
 }

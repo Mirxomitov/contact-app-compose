@@ -32,6 +32,7 @@ import org.orbitmvi.orbit.compose.collectSideEffect
 import uz.gita.contactappcompose.ui.components.AddContactTextField
 import uz.gita.contactappcompose.ui.components.HeightSpace
 import uz.gita.contactappcompose.utils.MaskTransformation
+import uz.gita.contactappcompose.utils.logger
 
 class AddScreen(private val doReload: () -> Unit) : Screen {
     @Composable
@@ -80,12 +81,10 @@ fun AddScreenContent(
             fontSize = 12.sp
         )
 
+        logger(phone + " : PHONE NUMBER")
         TextButton(
             enabled = (firstName.length > 3) && (lastName.length > 3)
-                    && (phone.length == 13)
-                    && phone.startsWith("+998")
-                    && phone.contains(Regex("^[0-9+]+$"))
-                    && (phone.indexOf("+") == 0),
+                    && (phone.length == 9),
             modifier = Modifier.align(Alignment.CenterEnd),
             onClick = {
                 eventDispatcher(
@@ -126,14 +125,14 @@ fun AddScreenContent(
             keyboardOptions = KeyboardOptions(capitalization = KeyboardCapitalization.Words),
         )
         HeightSpace(height = 12)
-//        AddContactTextField(
-//            label = "Телефон", value = phone, onValueChange = {
-//                phone = it
-//            }, labelColor = Color.Black, keyboardOptions = KeyboardOptions(
-//                capitalization = KeyboardCapitalization.Words,
-//                keyboardType = KeyboardType.Phone
-//            )
-//        )
+        /*AddContactTextField(
+            label = "Телефон", value = phone, onValueChange = {
+                phone = it
+            }, labelColor = Color.Black, keyboardOptions = KeyboardOptions(
+                capitalization = KeyboardCapitalization.Words,
+                keyboardType = KeyboardType.Phone
+            )
+        )*/
 
         val maxLength = 9
         OutlinedTextField(
@@ -164,5 +163,4 @@ fun AddScreenContent(
             }
         )
     }
-
 }

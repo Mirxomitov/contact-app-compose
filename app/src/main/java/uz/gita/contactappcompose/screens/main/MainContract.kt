@@ -31,6 +31,6 @@ interface MainContract {
 
     interface Direction {
         suspend fun openAddContact(doReload: () -> Unit)
-        suspend fun openEditContact(data : ContactUIData)
+        suspend fun openEditContact(data : ContactUIData, doReload: () -> Unit)
     }
 }
