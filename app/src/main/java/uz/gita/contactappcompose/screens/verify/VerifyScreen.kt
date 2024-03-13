@@ -102,8 +102,8 @@ fun VerifyContent(
                 isLoading = true
                 eventDispatcher(
                     VerifyContract.Intent.CheckCode(
-                        smsCode,
-                        phone = phone
+                        smsCode.trim(),
+                        phone = phone.trim()
                     )
                 )
             },

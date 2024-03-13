@@ -59,7 +59,7 @@ class MainViewModel @Inject constructor(
     override fun loadContacts() {
         repository.loadContacts().onEach {
             it.onSuccess {
-                logger("SUCCESS")
+                logger("loadContacts()")
                 intent {
                     reduce {
                         MainContract.UIState.Contacts(
@@ -76,5 +76,10 @@ class MainViewModel @Inject constructor(
     }
 
     override val container =
-        container<MainContract.UIState, MainContract.SideEffect>(MainContract.UIState.EmptyState)
+        container<MainContract.UIState, MainContract.SideEffect>(
+            MainContract.UIState.Contacts(
+                true,
+                emptyList()
+            )
+        )
 }

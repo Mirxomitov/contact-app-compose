@@ -203,10 +203,10 @@ fun RegisterScreeContent(
                 isLoading = true
                 eventDispatcher(
                     RegisterContract.Intent.Register(
-                        firstName,
-                        lastName,
-                        phone,
-                        password
+                        firstName.trim(),
+                        lastName.trim(),
+                        phone.trim(),
+                        password.trim()
                     )
                 )
             },

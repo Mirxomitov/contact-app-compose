@@ -165,7 +165,7 @@ fun LogInScreeContent(
             onClicked = {
                 enabled = false
                 isLoading = true
-                eventDispatcher(LoginContract.Intent.Login(phone, password))
+                eventDispatcher(LoginContract.Intent.Login(phone.trim(), password.trim()))
             },
             enabled = enabled,
             isLoading = isLoading,
