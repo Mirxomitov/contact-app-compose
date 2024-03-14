@@ -32,6 +32,7 @@ import cafe.adriel.voyager.hilt.getViewModel
 import org.orbitmvi.orbit.compose.collectSideEffect
 import uz.gita.contactappcompose.data.model.ContactUIData
 import uz.gita.contactappcompose.ui.components.HeightSpace
+import uz.gita.contactappcompose.ui.theme.ContactAppComposeTheme
 import uz.gita.contactappcompose.utils.MaskTransformation
 
 class EditScreen(
@@ -54,8 +55,9 @@ class EditScreen(
                 EditContract.SideEffect.ReloadEffect -> doReload()
             }
         }
-
-        EditScreenContent(data, viewModel::eventDispatcher)
+        ContactAppComposeTheme {
+            EditScreenContent(data, viewModel::eventDispatcher)
+        }
     }
 }
 

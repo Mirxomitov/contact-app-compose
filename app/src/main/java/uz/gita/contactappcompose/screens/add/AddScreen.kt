@@ -30,6 +30,7 @@ import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.hilt.getViewModel
 import org.orbitmvi.orbit.compose.collectSideEffect
 import uz.gita.contactappcompose.ui.components.HeightSpace
+import uz.gita.contactappcompose.ui.theme.ContactAppComposeTheme
 import uz.gita.contactappcompose.utils.MaskTransformation
 import uz.gita.contactappcompose.utils.logger
 
@@ -50,8 +51,9 @@ class AddScreen(private val doReload: () -> Unit) : Screen {
                 AddContract.SideEffect.ReloadEffect -> doReload.invoke()
             }
         }
-
-        AddScreenContent(viewModel::eventDispatcher)
+        ContactAppComposeTheme {
+            AddScreenContent(viewModel::eventDispatcher)
+        }
     }
 }
 

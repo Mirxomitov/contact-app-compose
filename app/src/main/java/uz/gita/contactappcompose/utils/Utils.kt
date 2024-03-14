@@ -10,9 +10,9 @@ fun logger(msg: String, tag: String = "TTT") {
     Log.d(tag, msg)
 }
 
-class MaskTransformation(): VisualTransformation {
+class MaskTransformation() : VisualTransformation {
     override fun filter(text: AnnotatedString): TransformedText {
-        return maskFilter(text )
+        return maskFilter(text)
     }
 }
 
@@ -45,24 +45,39 @@ fun maskFilter(text: AnnotatedString): TransformedText {
 
     val numberOffsetTranslator = object : OffsetMapping {
         override fun originalToTransformed(offset: Int): Int {
-            // (XX)   XXX  XX   XX
-            // 0 1 2  3-5  5-6  7-8
-            if (offset == 0) return 0
-            if (offset <= 2) return offset + 1 // '(9'
-            if (offset <= 5) return offset + 3 // '(99) '
-            if (offset in 6..7) return offset + 4
-            if (offset in 8..9) return offset + 5
-            return offset + 6
+            logger("offset1=$offset")
+            return when (offset) {
+                0 -> 0
+                1 -> 3
+                2 -> 4
+                3 -> 6
+                4 -> 7
+                5 -> 8
+                6 -> 10
+                7 -> 11
+                8 -> 13
+                else -> 14
+            }
         }
-
         override fun transformedToOriginal(offset: Int): Int {
-
-            if (offset == 0) return 0
-            if (offset <= 2) return offset - 0
-            if (offset <= 5) return offset - 2
-            if (offset <= 7) return offset - 3
-            if (offset <= 9) return offset - 4
-            return offset - 5
+            logger("offset2=$offset")
+            return when (offset) {
+                0 -> 0
+                1 -> 1
+                2 -> 1
+                3 -> 2
+                4 -> 2
+                5 -> 3
+                6 -> 4
+                7 -> 5
+                8 -> 5
+                9 -> 6
+                10 -> 7
+                11 -> 7
+                12 -> 8
+                13 -> 8
+                else -> 9
+            }
         }
     }
 
